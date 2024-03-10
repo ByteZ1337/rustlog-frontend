@@ -15,7 +15,6 @@ interface StvEmoteSet {
     emotes: StvEmote[];
 }
 
-
 interface StvEmote {
     id: string;
     name: string;

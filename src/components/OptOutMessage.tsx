@@ -11,5 +11,5 @@ const OptOutContainer = styled.div`
 `;
 
 export function OptOutMessage() {
-    return <OptOutContainer>User or channel has opted out</OptOutContainer>
+    return <OptOutContainer>User opted out</OptOutContainer>
 }

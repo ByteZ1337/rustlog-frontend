@@ -31,7 +31,6 @@ export interface State {
     currentUsername: string | null,
     error: boolean,
     activeSearchField: HTMLInputElement | null,
-    showOptout: boolean,
 }
 
 export type Action = Record<string, unknown>;
@@ -65,13 +64,11 @@ const defaultContext = {
         },
         currentChannel: url.searchParams.get("channel"),
         currentUsername: url.searchParams.get("username"),
-        showOptout: url.searchParams.has("optout"),
         error: false,
     } as State,
     setState: (state: State) => { },
     setCurrents: (currentChannel: string | null = null, currentUsername: string | null = null) => { },
     setSettings: (newSettings: Settings) => { },
-    setShowOptout: (show: boolean) => { },
 };
 
 const store = createContext(defaultContext);
@@ -81,20 +78,6 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
 
     const [settings, setSettingsStorage] = useLocalStorage("justlog:settings", defaultContext.state.settings);
     const [state, setState] = useState({ ...defaultContext.state, settings });
-
-    const setShowOptout = (show: boolean) => {
-        const url = new URL(window.location.href);
-
-        if (show) {
-            url.searchParams.set("optout", "");
-        } else {
-            url.searchParams.delete("optout");
-        }
-
-        window.history.replaceState({}, "justlog", url.toString());
-
-        setState({ ...state, showOptout: show })
-    }
 
     const setSettings = (newSettings: Settings) => {
         for (const key of Object.keys(newSettings)) {
@@ -126,7 +109,7 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
         window.history.replaceState({}, "justlog", url.toString());
     }
 
-    return <Provider value={{ state, setState, setSettings, setCurrents, setShowOptout }}>{children}</Provider>;
+    return <Provider value={{ state, setState, setSettings, setCurrents }}>{children}</Provider>;
 };
 
 export { store, StateProvider };

@@ -1,13 +1,11 @@
-import { Button, TextField } from "@mui/material";
-import { Autocomplete } from '@mui/material';
-import React, { FormEvent, useContext } from "react";
-import { useQueryClient } from "react-query";
+import {Autocomplete, Button, TextField} from "@mui/material";
+import React, {FormEvent, useContext} from "react";
+import {useQueryClient} from "react-query";
 import styled from "styled-components";
-import { useChannels } from "../hooks/useChannels";
-import { store } from "../store";
-import { Docs } from "./Docs";
-import { Optout } from "./Optout";
-import { Settings } from "./Settings";
+import {useChannels} from "../hooks/useChannels";
+import {store} from "../store";
+import {Docs} from "./Docs";
+import {Settings} from "./Settings";
 
 const FiltersContainer = styled.form`
     display: inline-flex;
@@ -67,7 +65,6 @@ export function Filters() {
             <Button variant="contained" color="primary" size="large" type="submit">load</Button>
             <Settings />
             <Docs />
-            <Optout />
         </FiltersContainer>
     </FiltersWrapper>
 }
