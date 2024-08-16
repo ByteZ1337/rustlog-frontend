@@ -4,7 +4,6 @@ import {useQueryClient} from "react-query";
 import styled from "styled-components";
 import {useChannels} from "../hooks/useChannels";
 import {store} from "../store";
-import {Docs} from "./Docs";
 import {Settings} from "./Settings";
 
 const FiltersContainer = styled.form`
@@ -43,10 +42,11 @@ export function Filters() {
 
             const channel = data.get("channel") as string | null;
             const username = data.get("username") as string | null;
+            const key = data.get("key") as string | null;
 
             queryClient.invalidateQueries(["log", { channel: channel?.toLowerCase(), username: username?.toLowerCase() }]);
 
-            setCurrents(channel, username);
+            setCurrents(channel, username, key);
         }
     };
 
@@ -62,6 +62,7 @@ export function Filters() {
                 renderInput={(params) => <TextField {...params} name="channel" label="channel or id:123" variant="filled" autoFocus={state.currentChannel === null} />}
             />
             <TextField error={state.error} name="username" label="username or id:123" variant="filled" autoComplete="off" defaultValue={state.currentUsername} autoFocus={state.currentChannel !== null && state.currentUsername === null} />
+            <TextField error={state.error} name="key" label="auth key" variant="filled" autoComplete="off" defaultValue={state.currentKey} autoFocus={state.currentChannel !== null && state.currentUsername !== null && state.currentKey == null} type="password" />
             <Button variant="contained" color="primary" size="large" type="submit">load</Button>
             <Settings />
         </FiltersContainer>

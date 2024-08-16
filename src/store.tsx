@@ -29,6 +29,7 @@ export interface State {
     apiBaseUrl: string,
     currentChannel: string | null,
     currentUsername: string | null,
+    currentKey: string | null,
     error: boolean,
     activeSearchField: HTMLInputElement | null,
 }
@@ -64,10 +65,11 @@ const defaultContext = {
         },
         currentChannel: url.searchParams.get("channel"),
         currentUsername: url.searchParams.get("username"),
+        currentKey: "",
         error: false,
     } as State,
     setState: (state: State) => { },
-    setCurrents: (currentChannel: string | null = null, currentUsername: string | null = null) => { },
+    setCurrents: (currentChannel: string | null = null, currentUsername: string | null = null, currentKey: string | null = null) => { },
     setSettings: (newSettings: Settings) => { },
 };
 
@@ -92,11 +94,11 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
         setState({ ...state, settings: newSettings });
     }
 
-    const setCurrents = (currentChannel: string | null = null, currentUsername: string | null = null) => {
+    const setCurrents = (currentChannel: string | null = null, currentUsername: string | null = null, currentKey: string | null = null) => {
         currentChannel = currentChannel?.toLowerCase().trim() ?? null;
         currentUsername = currentUsername?.toLowerCase().trim() ?? null;
 
-        setState({ ...state, currentChannel, currentUsername, error: false });
+        setState({ ...state, currentChannel, currentUsername, currentKey, error: false });
 
         const url = new URL(window.location.href);
         if (currentChannel) {
@@ -104,6 +106,9 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
         }
         if (currentUsername) {
             url.searchParams.set("username", currentUsername);
+        }
+        if (currentKey) {
+            url.searchParams.set("key", currentKey);
         }
 
         window.history.replaceState({}, "justlog", url.toString());
