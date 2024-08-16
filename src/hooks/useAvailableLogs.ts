@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { OptOutError } from "../errors/OptOutError";
+import { AuthError } from "../errors/AuthError";
 import { getUserId, isUserId } from "../services/isUserId";
 import { store } from "../store";
 
 export type AvailableLogs = Array<{ month: string, year: string }>;
 
-export function useAvailableLogs(channel: string | null, username: string | null): [AvailableLogs, Error | undefined] {
+export function useAvailableLogs(channel: string | null, username: string | null, key: string | null): [AvailableLogs, Error | undefined] {
     const { state, setState } = useContext(store);
 
     // @ts-ignore I don't understand this error :)
@@ -29,7 +30,11 @@ export function useAvailableLogs(channel: string | null, username: string | null
         queryUrl.searchParams.append(`channel${channelIsId ? "id" : ""}`, channel);
         queryUrl.searchParams.append(`user${usernameIsId ? "id" : ""}`, username);
 
-        return fetch(queryUrl.toString()).then((response) => {
+        return fetch(queryUrl.toString(), {
+            headers: {
+                "X-Api-Key": key ?? ""
+            }
+        }).then((response) => {
             if (response.ok) {
                 return response;
             }
@@ -37,7 +42,7 @@ export function useAvailableLogs(channel: string | null, username: string | null
             setState({ ...state, error: true });
 
             if (response.status === 403) {
-                throw new OptOutError();
+                throw response.headers.has("X-Opt-Out") ? new OptOutError() : new AuthError();
             }
 
             throw Error(response.statusText);

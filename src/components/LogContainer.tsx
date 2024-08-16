@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { OptOutError } from "../errors/OptOutError";
+import { AuthError } from "../errors/AuthError";
 import { useAvailableLogs } from "../hooks/useAvailableLogs";
 import { store } from "../store";
 import { Log } from "./Log";
 import { OptOutMessage } from "./OptOutMessage";
+import { AuthErrorMessage } from "./AuthErrorMessage";
 
 const LogContainerDiv = styled.div`
     color: white;
@@ -34,9 +36,11 @@ export function LogContainer() {
         return () => window.removeEventListener("keydown", listener);
     }, [state.activeSearchField, state.settings.twitchChatMode.value, ctrlKey]);
 
-    const [availableLogs, err] = useAvailableLogs(state.currentChannel, state.currentUsername);
+    const [availableLogs, err] = useAvailableLogs(state.currentChannel, state.currentUsername, state.currentKey);
     if (err instanceof OptOutError) {
         return <OptOutMessage />;
+    } else if (err instanceof AuthError) {
+        return <AuthErrorMessage />;
     }
 
     return <LogContainerDiv>

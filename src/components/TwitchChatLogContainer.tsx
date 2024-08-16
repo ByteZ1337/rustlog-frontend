@@ -14,7 +14,7 @@ const ContentLogContainer = styled.ul`
 export function TwitchChatContentLog({ year, month }: { year: string, month: string }) {
     const { state } = useContext(store);
 
-    const logs = useLog(state.currentChannel ?? "", state.currentUsername ?? "", year, month)
+    const logs = useLog(state.currentChannel ?? "", state.currentUsername ?? "", state.currentKey ?? "", year, month)
 
     return <ContentLogContainer>
         {logs.map((log, index) => <TwitchChatLogLine key={log.id ? log.id : index} message={log} />)}

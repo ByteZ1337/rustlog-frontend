@@ -7,7 +7,7 @@ import runes from "runes";
 
 
 
-export function useLog(channel: string, username: string, year: string, month: string): Array<LogMessage> {
+export function useLog(channel: string, username: string, key: string, year: string, month: string): Array<LogMessage> {
     const { state } = useContext(store);
 
     const { data } = useQuery<Array<LogMessage>>(["log", { channel: channel, username: username, year: year, month: month }], () => {
@@ -28,7 +28,11 @@ export function useLog(channel: string, username: string, year: string, month: s
                 queryUrl.searchParams.append("reverse", "1");
             }
 
-            return fetch(queryUrl.toString()).then((response) => {
+            return fetch(queryUrl.toString(), {
+                headers: {
+                    "X-Api-Key": key
+                }
+            }).then((response) => {
                 if (response.ok) {
                     return response;
                 }
