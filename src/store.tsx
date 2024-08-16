@@ -107,9 +107,6 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
         if (currentUsername) {
             url.searchParams.set("username", currentUsername);
         }
-        if (currentKey) {
-            url.searchParams.set("key", currentKey);
-        }
 
         window.history.replaceState({}, "justlog", url.toString());
     }
