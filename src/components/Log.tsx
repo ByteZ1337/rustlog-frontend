@@ -9,8 +9,9 @@ import { TwitchChatContentLog } from "./TwitchChatLogContainer";
 
 const LogContainer = styled.div`
     position: relative;
-    background: var(--bg-bright);
-    border-radius: 3px;
+    background: rgba(var(--bg-bright), 0.3);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
     padding: 0.5rem;
     margin-top: 3rem;
 
